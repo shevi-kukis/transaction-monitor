@@ -52,7 +52,7 @@ graph LR
 ### Backend (.NET 8)
 - **Minimal APIs**: Optimized for high-throughput and low latency.
 - **SignalR & Redis Backplane**: Enables real-time synchronization across multiple server instances (Pods).
-- **Entity Framework Core**: Persistent storage using SQLite with thread-safe service scoping.
+- **Entity Framework Core**: Persistent storage using PostgreSQL with thread-safe service scoping.
 - **FluentValidation**: Robust input validation to ensure data integrity.
 
 ###  Architectural Refactoring 
