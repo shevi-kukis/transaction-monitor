@@ -6,6 +6,24 @@ This system is a high-performance, real-time transaction monitoring solution. It
 The project is built with a focus on **Scalability**, **Concurrency Safety**, and **Modern DevOps practices**.
 
 ---
+## System Architecture
+
+```mermaid
+graph TD
+    A[React Simulator] -->|REST API POST| B[.NET 8 Backend]
+    B --> C[Transaction Service]
+    C --> D[(SQLite DB)]
+    C --> E[Redis Cache]
+    C --> F[SignalR Hub]
+    F -->|Redis Backplane| G[React Live Dashboard]
+
+    style B fill:#512bd4,color:#fff
+    style D fill:#003b57,color:#fff
+    style E fill:#a41e11,color:#fff
+    style G fill:#61dbfb,color:#000
+```
+
+---
 
 ##  Architecture & Tech Stack
 
@@ -72,17 +90,22 @@ dotnet test
 
 ### 1. Using Docker Compose (Recommended)
 This will spin up the API, the Client, and the Redis server automatically:
+```bash
 docker-compose up --build
-
+```
 ### 2. Manual Setup
-Backend:
+Backend
+```bash
 cd FinancialMonitor
 dotnet run
+```
 
-Frontend:
+Frontend
+```bash
 cd financial-monitor-client
 npm install
 npm run dev
+```
 
 ---
 
