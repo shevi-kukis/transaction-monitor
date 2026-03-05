@@ -63,7 +63,7 @@ private static async Task<Results<Ok, NotFound>> UpdateTransaction(
     return TypedResults.Ok();
 }
 
-// פונקציית מחיקה
+
 private static async Task<Results<NoContent, NotFound>> DeleteTransaction(
     Guid id,
     ITransactionService service)

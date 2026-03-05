@@ -207,27 +207,25 @@
   }
   20% {
     background-color: rgba(79, 70, 229, 0.3);
-    transform: translateX(4px); /* דחיפה קלה ימינה כדי לסמן כניסה  */
+    transform: translateX(4px);
   }
   100% { 
     background-color: transparent;
     transform: translateX(0);
   }
-}/* monitor.css */
+}
 
 .transaction-row {
-  transition: all 0.4s ease-in-out; /* מעבר חלק לכל שינוי (צבע, שקיפות)  */
+  transition: all 0.4s ease-in-out; 
   opacity: 1;
 }
 
-/* כשהשורה מסוננת החוצה (אם את משתמשת ב-class להסתרה) [cite: 33, 49] */
 .transaction-row.hidden {
   opacity: 0;
   transform: scale(0.95);
   pointer-events: none;
 }
 
-/* עידון של ה-Badge כדי שהצבע ישתנה בצורה הדרגתית  */
 .status-badge {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
