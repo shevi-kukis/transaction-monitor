@@ -65,7 +65,7 @@ function TransactionTable({ transactions, onEdit, onDelete }: Props) {
                       autoFocus
                     />
                   ) : (
-                    `$${t.amount.toLocaleString()}`
+                    `${t.amount.toLocaleString()}`
                   )}
                 </td>
                 <td>{t.currency}</td>

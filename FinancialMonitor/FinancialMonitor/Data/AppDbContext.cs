@@ -18,5 +18,9 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<Transaction>()
             .HasIndex(t => t.CreatedAt);
+
+        modelBuilder.Entity<Transaction>()
+    .Property(t => t.xmin)
+    .IsRowVersion();
     }
 }

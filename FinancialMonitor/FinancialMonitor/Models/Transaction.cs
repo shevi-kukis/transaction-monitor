@@ -11,6 +11,8 @@ public class Transaction
     public TransactionStatus Status { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public uint xmin { get; set; }
 }
 
 public enum TransactionStatus

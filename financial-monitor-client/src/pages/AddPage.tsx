@@ -37,52 +37,57 @@ function AddPage() {
     setLoading(false);
   };
 
-  return (
-    <div className="page-container">
-      <h1>Transaction Simulator</h1>
+ return (
+    <div className="simulator-container">
+      <header className="simulator-header">
+        <h1>Transaction Simulator</h1>
+        <p>Manage and generate financial data in real-time</p>
+      </header>
 
-      <div className="card">
-        <h3>Manual Transaction</h3>
+      <div className="simulator-grid">
+    
+        <section className="glass-card">
+          <div className="card-icon">⌨️</div>
+          <h3>Manual Entry</h3>
+          <div className="input-group">
+            <input
+              type="number"
+              placeholder="0.00"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              disabled={loading}
+            />
+            <select
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+              disabled={loading}
+            >
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+            </select>
+          </div>
+          <button className="primary-btn" onClick={submitManual} disabled={loading || !amount}>
+            {loading ? "Processing..." : "Add Transaction"}
+          </button>
+        </section>
 
-        <input
-          type="number"
-          placeholder="Amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          disabled={loading}
-        />
-
-        <select
-          value={currency}
-          onChange={(e) => setCurrency(e.target.value)}
-          disabled={loading}
-        >
-          <option value="USD">USD</option>
-          <option value="EUR">EUR</option>
-        </select>
-
-        <button onClick={submitManual} disabled={loading}>
-          Add Transaction
-        </button>
-      </div>
-
-      <div className="card">
-        <h3>Random Generator</h3>
-
-        <button onClick={generateOne} disabled={loading}>
-          Generate 1
-        </button>
-
-        <button
-          onClick={generateHundred}
-          style={{ marginLeft: "10px" }}
-          disabled={loading}
-        >
-          Generate 100
-        </button>
+        <section className="glass-card">
+          <div className="card-icon">⚡</div>
+          <h3>Stress Testing</h3>
+          <div className="btn-stack">
+            <button className="secondary-btn" onClick={generateOne} disabled={loading}>
+              Generate Single
+            </button>
+            <button className="accent-btn" onClick={generateHundred} disabled={loading}>
+              Bulk Generate (100)
+            </button>
+          </div>
+        </section>
       </div>
     </div>
   );
 }
+
+
 
 export default AddPage;

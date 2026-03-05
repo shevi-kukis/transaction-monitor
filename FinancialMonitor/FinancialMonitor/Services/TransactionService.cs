@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
-using System.Threading; 
+using System.Threading;
 
 namespace FinancialMonitor.Services;
 
@@ -17,18 +17,18 @@ public class TransactionService : ITransactionService
     private readonly IClientNotifierService _notifier;
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly IDistributedCache _cache;
-    
+
     private static readonly SemaphoreSlim _cacheSemaphore = new SemaphoreSlim(1, 1);
 
     private readonly ILogger<TransactionService> _logger;
-    
+
     private const string CacheKey = "transactions_top_10";
-public TransactionService(
-        AppDbContext context,
-        IClientNotifierService notifier, 
-        IServiceScopeFactory scopeFactory,
-        IDistributedCache cache,
-        ILogger<TransactionService> logger) 
+    public TransactionService(
+            AppDbContext context,
+            IClientNotifierService notifier,
+            IServiceScopeFactory scopeFactory,
+            IDistributedCache cache,
+            ILogger<TransactionService> logger)
     {
         _context = context;
         _notifier = notifier;
@@ -56,7 +56,7 @@ public TransactionService(
 
             var transactions = await _context.Transactions
                 .OrderByDescending(t => t.CreatedAt)
-                .Take(10) 
+                .Take(10)
                 .ToListAsync();
 
             var cacheOptions = new DistributedCacheEntryOptions()
@@ -68,7 +68,7 @@ public TransactionService(
         }
         finally
         {
-            _cacheSemaphore.Release(); 
+            _cacheSemaphore.Release();
         }
     }
 
@@ -85,12 +85,12 @@ public TransactionService(
 
         _context.Transactions.Add(transaction);
         await _context.SaveChangesAsync();
-        
-        await _cache.RemoveAsync(CacheKey); 
+
+        await _cache.RemoveAsync(CacheKey);
 
         await _notifier.NotifyTransactionUpdatedAsync(transaction);
 
-         _ = ProcessTransactionAsync(transaction.Id);
+        _ = ProcessTransactionAsync(transaction.Id);
 
         return transaction;
     }
@@ -102,30 +102,39 @@ public TransactionService(
 
         _context.Transactions.Remove(transaction);
         await _context.SaveChangesAsync();
-        
+
         await _cache.RemoveAsync(CacheKey);
         return true;
     }
 
+
     public async Task<bool> UpdateTransactionAmountAsync(Guid id, decimal newAmount)
     {
-        var transaction = await _context.Transactions.FindAsync(id);
-        if (transaction == null) return false;
-
-        transaction.Amount = newAmount;
-        await _context.SaveChangesAsync();
-
-        await _cache.RemoveAsync(CacheKey); 
-        await _notifier.NotifyAmountChangedAsync(transaction);
-        return true;
-    }
-
-  private async Task ProcessTransactionAsync(Guid transactionId)
-    {
-        try 
+        try
         {
-            await Task.Delay(3000); 
-            
+            var transaction = await _context.Transactions.FindAsync(id);
+            if (transaction == null) return false;
+
+            transaction.Amount = newAmount;
+
+            await _context.SaveChangesAsync();
+
+            await _cache.RemoveAsync(CacheKey);
+            await _notifier.NotifyAmountChangedAsync(transaction);
+            return true;
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            _logger.LogWarning(ex, "Concurrency conflict detected for transaction {Id}", id);
+            throw new Exception("The record has been modified by another user. Please refresh and try again.");
+        }
+    }
+    private async Task ProcessTransactionAsync(Guid transactionId)
+    {
+        try
+        {
+            await Task.Delay(3000);
+
             using var scope = _scopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             var notifier = scope.ServiceProvider.GetRequiredService<IClientNotifierService>();
@@ -137,12 +146,12 @@ public TransactionService(
             transaction.Status = random.Next(0, 2) == 0 ? TransactionStatus.Completed : TransactionStatus.Failed;
 
             await context.SaveChangesAsync();
-            await _cache.RemoveAsync(CacheKey); 
+            await _cache.RemoveAsync(CacheKey);
             await notifier.NotifyTransactionUpdatedAsync(transaction);
         }
         catch (Exception ex)
         {
-            try 
+            try
             {
                 using var errorScope = _scopeFactory.CreateScope();
                 var errorContext = errorScope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -157,7 +166,7 @@ public TransactionService(
                 }
             }
             catch (Exception innerEx)
-            { 
+            {
                 _logger.LogCritical(innerEx, "Critical failure in background processing for transaction {Id}. Original error: {Msg}", transactionId, ex.Message);
             }
         }
