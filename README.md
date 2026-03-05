@@ -12,13 +12,13 @@ The project is built with a focus on **Scalability**, **Concurrency Safety**, an
 graph TD
     A[React Simulator] -->|REST API POST| B[.NET 8 Backend]
     B --> C[Transaction Service]
-    C --> D[(SQLite DB)]
+    C --> D[(PostgreSQL DB)]
     C --> E[Redis Cache]
     C --> F[SignalR Hub]
     F -->|Redis Backplane| G[React Live Dashboard]
-
+    
     style B fill:#512bd4,color:#fff
-    style D fill:#003b57,color:#fff
+    style D fill:#336791,color:#fff
     style E fill:#a41e11,color:#fff
     style G fill:#61dbfb,color:#000
 ```
