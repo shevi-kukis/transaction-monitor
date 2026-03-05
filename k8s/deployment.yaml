@@ -10,10 +10,8 @@ spec:
       - name: api
         image: your-docker-hub-user/financial-monitor-api:latest 
         env:
-        # שינוי מחרוזת ההתחברות ל-Postgres Service
+      
         - name: ConnectionStrings__DefaultConnection
           value: "Host=postgres-service;Database=financial_monitor_db;Username=postgres;Password=MySecret123"
         - name: ConnectionStrings__Redis 
           value: "redis-service:6379"
-        # מחקנו את ה-volumeMounts של ה-sqlite
-      # מחקנו את ה-volumes של ה-sqlite
