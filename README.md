@@ -34,16 +34,27 @@ graph LR
         P1[.NET Pod 1]
         P2[.NET Pod 2]
         P3[.NET Pod 3]
+        P4[...]
+        P5[.NET Pod 5]
     end
 
     C1 --> P1
     C2 --> P3
 
-    P1 <--> R((Redis Backplane))
+    P1 <--> R((Redis Backplane & Distributed Cache))
     P2 <--> R
     P3 <--> R
+    P4 <--> R
+    P5 <--> R
+
+    P1 --> DB[(PostgreSQL DB)]
+    P2 --> DB
+    P3 --> DB
+    P4 --> DB
+    P5 --> DB
 
     style R fill:#a41e11,color:#fff
+    style DB fill:#336791,color:#fff
 ```
 ---
 
