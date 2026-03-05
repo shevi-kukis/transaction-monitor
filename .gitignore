@@ -1,0 +1,22 @@
+# --- Backend (.NET) ---
+**/bin/
+**/obj/
+*.db
+*.db-journal
+**/out/
+**/publish/
+
+# --- Frontend (React) ---
+**/node_modules/
+**/build/
+**/dist/
+.env.local
+
+# --- General ---
+.vs/
+.vscode/
+.idea/
+*.user
+
+# --- Secrets & Environment ---
+.env
