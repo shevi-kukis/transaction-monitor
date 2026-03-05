@@ -22,7 +22,29 @@ graph TD
     style E fill:#a41e11,color:#fff
     style G fill:#61dbfb,color:#000
 ```
+## Distributed Challenge
+```mermaid
+graph LR
+    subgraph Clients
+        C1[User A]
+        C2[User B]
+    end
 
+    subgraph "Kubernetes Cluster (5 Replicas)"
+        P1[.NET Pod 1]
+        P2[.NET Pod 2]
+        P3[.NET Pod 3]
+    end
+
+    C1 --> P1
+    C2 --> P3
+
+    P1 <--> R((Redis Backplane))
+    P2 <--> R
+    P3 <--> R
+
+    style R fill:#a41e11,color:#fff
+```
 ---
 
 ##  Architecture & Tech Stack
